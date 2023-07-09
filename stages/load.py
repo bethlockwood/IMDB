@@ -3,10 +3,10 @@ import io
 def load(final_df, alchemyEngine, table, s3_resource, s3_bucket, s3_filename, load_db_bool=True, load_s3_bool=True):
     responses = []
     if load_db_bool == True:
-        db_response = _load_db(final_df, alchemyEngine, table)
+        db_response = load_db(final_df, alchemyEngine, table)
         responses.append(db_response)
     if load_s3_bool == True:
-        s3_response = _load_s3(final_df, s3_resource, s3_bucket, s3_filename)
+        s3_response = load_s3(final_df, s3_resource, s3_bucket, s3_filename)
         responses.append(s3_response)
     else:
         responses.append('No Data Loaded')
@@ -15,7 +15,7 @@ def load(final_df, alchemyEngine, table, s3_resource, s3_bucket, s3_filename, lo
 
 ### HELPER FUNCTIONS ###
 
-def _load_db(final_df, alchemyEngine, table):
+def load_db(final_df, alchemyEngine, table):
     # Connect to PostgreSQL server
     dbConnection = alchemyEngine.connect()
 
@@ -29,7 +29,7 @@ def _load_db(final_df, alchemyEngine, table):
     finally:
         dbConnection.close()
         
-def _load_s3(final_df, s3_resource, s3_bucket, s3_filename):
+def load_s3(final_df, s3_resource, s3_bucket, s3_filename):
     # Create a string buffer to store the CSV data
     csv_buffer = io.StringIO()
 
