@@ -4,6 +4,7 @@ from stages.auth import auth
 from stages.extract import extract_all
 from stages.transform import transform
 from stages.load import load
+from stages.report import report
 
 # Configure logging module
 logging.basicConfig(filename = 'pipeline.log', encoding='utf-8', level = logging.DEBUG)
@@ -32,7 +33,7 @@ logging.info(f'{datetime.now()} - Transform Complete')
 
 # Load final DataFrame to S3 Bucket and/or Postgres Database
 logging.info(f'{datetime.now()} - Beginning Load...')
-response = load(final_df
+load_response = load(final_df
                 , alchemyEngine
                 , 'imdb_final'
                 , s3_resource
@@ -40,4 +41,12 @@ response = load(final_df
                 , 'imdb_final.csv'
                 , load_db_bool=True
                 , load_s3_bool=True)
-logging.info(f'{datetime.now()} - Load Complete - {response}')
+logging.info(f'{datetime.now()} - Load Complete - {load_response}')
+
+# Generate Genre report and load to S3 Bucket and Postgres Database
+logging.info(f'{datetime.now()} - Beginning Report Genreation...')
+report_responses = report(final_df
+                          , alchemyEngine
+                          , s3_resource
+                          , s3_bucket)
+logging.info(f'{datetime.now()} - Report Complete - {report_responses}')
