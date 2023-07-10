@@ -1,4 +1,5 @@
 from datetime import date
+import io
 from load import load_db, load_s3
 
 def report(final_df, alchemyEngine, s3_resource, s3_bucket):
@@ -27,8 +28,11 @@ def _generate_genre_report(df):
         Count=('Primary Genre', 'count')
     ).reset_index()
     
-    # Sort the genres based on the sum of revenue in descending order
-    genre_report = genre_report.sort_values(by='Sum_Revenue', ascending=False)
+    # Add a rank column on the sum of the reveue
+    genre_report['Rank'] = genre_report['Sum_Revenue'].rank(ascending=False)
+    
+    # Sort the genres based on the Rank
+    genre_report = genre_report.sort_values(by='Rank', ascending=True)
     
     # Add a column with the current date
     genre_report['Report_Date'] = date.today()
