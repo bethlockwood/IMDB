@@ -11,7 +11,11 @@ logging.basicConfig(filename = 'pipeline.log', encoding='utf-8', level = logging
 
 # Authenticate s3 Bucket & Postgres Database
 logging.info(f'{datetime.now()} - Beginning Authentication...')
-alchemyEngine, s3_resource, s3_bucket = auth('multi_config.ini')
+creds = auth('multi_config.ini')
+try:
+    alchemyEngine, s3_resource, s3_bucket = creds
+except ValueError:
+    logging.info(f'{datetime.now()} - A problem occured during Authentication - {creds}')
 logging.info(f'{datetime.now()} - Authentication Complete')
 
 # Extract data from S3 Bucket, Postgres Database and Local file
