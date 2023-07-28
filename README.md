@@ -1,4 +1,5 @@
-# imdb Data Engineering Project
+# IMDB Data Pipeline
+<h3 align="left">Multiverse Advanced Data Fellowship Data Engineering Project</h3>
 
 A data pipeline that:
 - Extracts data from an AWS S3 Bucket, Postgres Database and Local Directory
